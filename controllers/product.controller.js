@@ -21,6 +21,7 @@ productController.getAllProducts = async (req, res, next) => {
     const offset = limit * (page - 1);
 
     const products = await Product.find({ isDeleted: false })
+        .sort({ createdAt: -1 })
         .skip(offset)
         .limit(limit);
 
@@ -28,7 +29,7 @@ productController.getAllProducts = async (req, res, next) => {
       res,
       200,
       true,
-      { products, totalPages },
+      { products, totalProducts, page, totalPages },
       null,
       "Get all products Success"
     );
