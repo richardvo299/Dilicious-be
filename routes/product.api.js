@@ -7,7 +7,7 @@ const { check } = require("express-validator");
 
 //
 /**
- * @route GET api/product?page=1&limit=10
+ * @route GET api/product?page=1&limit=8
  * @description User can see list of all products
  * @access Public
  */

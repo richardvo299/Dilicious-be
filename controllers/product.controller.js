@@ -9,18 +9,20 @@ const productController = {};
 //Get all products with filter and query
 productController.getAllProducts = async (req, res, next) => {
   try {
-    let { page, limit, sortBy, ...filter } = { ...req.query };
-    // const keywords = search ? { name: { $regex: search, $options: "i" } } : {};
+    let { page, limit, sortBy, search, ...filter } = { ...req.query };
+    const keywords = search 
+      ? { name: { $regex: search, $options: "i" } } 
+      : {};
     page = parseInt(page) || 1;
-    limit = parseInt(limit) || 10;
+    limit = parseInt(limit) || 8;
 
-    const totalProducts = await Product.count({ ...filter, isDeleted: false });
+    const totalProducts = await Product.count({ ...filter, ...keywords, isDeleted: false });
     console.log("Total products", totalProducts);
 
     const totalPages = Math.ceil(totalProducts / limit);
     const offset = limit * (page - 1);
 
-    const products = await Product.find({ isDeleted: false })
+    const products = await Product.find({ isDeleted: false, ...keywords })
         .sort({ createdAt: -1 })
         .skip(offset)
         .limit(limit);
