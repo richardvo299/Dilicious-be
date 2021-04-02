@@ -8,8 +8,8 @@ const userController = {};
 
 userController.register = async (req, res, next) => {
   try {
-    let { name, email, password } = req.body;
-    let user = await User.findOne({ email: email });
+    let { name, email, password, role } = req.body;
+    let user = await User.findOne({ email });
     if (user) return next(new Error("401 - Email already exists"));
 
     const salt = await bcrypt.genSalt(10);
@@ -17,7 +17,9 @@ userController.register = async (req, res, next) => {
 
     user = await User.create({ name, email, password, role });
 
-    utilsHelper.sendResponse(res, 200, true, { user }, null, "Created account");
+    const accessToken = await user.generateToken();
+
+    utilsHelper.sendResponse(res, 200, true, { user, accessToken }, null, "Created account");
   } catch (error) {
     next(error);
   }
