@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Order = require("../models/Order");
+const Product = require("../models/Product");
 const utilsHelper = require("../helpers/utils.helper");
 
 const { validationResult, check } = require("express-validator");
@@ -12,16 +13,41 @@ let orderController = {};
 orderController.createOrder = async (req, res, next) => {
   try {
     const userId = req.userId;
-    console.log(req.body);
-    const { products, status, total } = req.body;
+    const { products, checkout, deliveryFee, status, total } = req.body;
     validator.checkObjectId(userId);
-    products.map((p) => validator.checkObjectId(p));
+    // products.map((p) => validator.checkObjectId(p));
+
+    if (products && products.length === 0) {
+      return next(new Error("No products added."));
+    }
+
+    const productList = [];
+    console.log("List of product", products);
+    console.log("products length", products.length);
+    let totalBeforeCharge = 0;
+    let totalBe = 0;
+    let fee = 40000;
+    for (let i = 0; i < products.length; i++) {
+      console.log("product n", products[i]);      
+      totalBeforeCharge += products[i].quantity * products[i].price;
+      console.log("Total before delivery", totalBeforeCharge);
+      productList.push(products[i]);
+    }
+
+    if (totalBeforeCharge > 500000 || checkout.orderType == "pickup") {
+      fee = 0;
+    } else {fee = 40000}
+
+    totalBe = totalBeforeCharge + fee;
 
     const order = await Order.create({
         userId,
-        products,
-        total,
-    });
+        products: productList,
+        checkout,
+        deliveryFee: fee,
+        status,
+        total: totalBe,
+    });''
     utilsHelper.sendResponse(res, 200, true, { order }, null, "Order created");
   } catch (error) {
     next(error);

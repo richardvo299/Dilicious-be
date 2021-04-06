@@ -24,6 +24,18 @@ router.post(
 );
 
 /**
+ * @route GET api/category/:id
+ * @description Get single category
+ * @access Admin required
+ */
+ router.get(
+  "/:id",
+  authMiddleware.loginRequired,
+  authMiddleware.adminRequired,
+  categoryController.deleteCategory
+);
+
+/**
  * @route DELETE api/category/:id/delete
  * @description Admin can delete category
  * @access Admin required

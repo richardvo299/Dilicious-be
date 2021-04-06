@@ -9,12 +9,13 @@ const productController = {};
 //Get all products with filter and query
 productController.getAllProducts = async (req, res, next) => {
   try {
-    let { page, limit, sortBy, search, ...filter } = { ...req.query };
+    let { page, limit, sortBy, search, category, ...filter } = { ...req.query };
     const keywords = search 
       ? { name: { $regex: search, $options: "i" } } 
       : {};
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 8;
+    category = category || null;
 
     const totalProducts = await Product.count({ ...filter, ...keywords, isDeleted: false });
     console.log("Total products", totalProducts);
@@ -25,7 +26,8 @@ productController.getAllProducts = async (req, res, next) => {
     const products = await Product.find({ isDeleted: false, ...keywords })
         .sort({ createdAt: -1 })
         .skip(offset)
-        .limit(limit);
+        .limit(limit)
+        .populate('categories')
 
     utilsHelper.sendResponse(
       res,
@@ -63,7 +65,7 @@ productController.getSingleProduct = async (req, res, next) => {
 //Add new product
 productController.addProduct = async (req, res, next) => {
   try {
-    const { name, description, price, size, images, options, toppings, tags, categories } = req.body;
+    const { name, description, price, size, images, options, toppings, tags, categories, sold } = req.body;
     
     let product = await Product.findOne({name: req.name});
     if (product) {
@@ -92,7 +94,10 @@ productController.addProduct = async (req, res, next) => {
       toppings,
       tags,
       categories: categoryIds,
+      sold,
     });
+    await products.populate("categories").execPopulate();
+
     utilsHelper.sendResponse(
       res,
       200,

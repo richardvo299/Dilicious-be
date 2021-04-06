@@ -13,7 +13,7 @@ const productSchema = Schema(
     tags: [{tag: { type: String, required: true }}],
     isDeleted: { type: Boolean, default: false },
     categories: [ { type: Schema.Types.ObjectId, ref: "Category" } ],
-    sold: { type: Number, required: true },
+    sold: { type: Number },
   },
   { timestamp: true }
 );
