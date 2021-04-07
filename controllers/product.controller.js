@@ -16,18 +16,69 @@ productController.getAllProducts = async (req, res, next) => {
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 8;
     category = category || null;
-
-    const totalProducts = await Product.count({ ...filter, ...keywords, isDeleted: false });
-    console.log("Total products", totalProducts);
-
-    const totalPages = Math.ceil(totalProducts / limit);
     const offset = limit * (page - 1);
 
-    const products = await Product.find({ isDeleted: false, ...keywords })
+    let categoryArray = [];
+    let totalProducts;
+    let products;
+
+    if (req.query.category) {
+      const categoryName = req.query.category.split(",");
+
+      for (let i = 0; i < categoryName.length; i++) {
+        const category = await Category.findOne({
+          name: categoryName[i],
+        }).lean();
+        console.log("category id", category._id);
+        categoryArray.push(category._id);
+      }
+    }
+
+    if (categoryArray.length === 0) {
+      totalProducts = await Product.count({ ...filter, ...keywords, isDeleted: false });
+      products = await Product.find({ isDeleted: false, ...keywords })
         .sort({ createdAt: -1 })
         .skip(offset)
         .limit(limit)
         .populate('categories')
+    } else {
+      totalProducts = await Product.find({
+        name: new RegExp(req.query.search, "i"),
+        categories: { $all: categoryArray },
+      }).countDocuments();
+      products = await Product.aggregate([
+        {
+          $match: {
+            $and: [
+              { name: new RegExp(req.query.search, "i") },
+              { categories: { $all: categoryArray } },
+            ],
+          },
+        },
+        { $skip: offset },
+        { $limit: limit },
+        {
+          $lookup: {
+            from: "categories",
+            localField: "categories",
+            foreignField: "_id",
+            as: "categories",
+          },
+        },
+      ]);
+    }
+
+    // const totalProducts = await Product.count({ ...filter, ...keywords, isDeleted: false });
+    console.log("Total products", totalProducts);
+
+    const totalPages = Math.ceil(totalProducts / limit);
+    
+
+    // const products = await Product.find({ isDeleted: false, ...keywords })
+    //     .sort({ createdAt: -1 })
+    //     .skip(offset)
+    //     .limit(limit)
+    //     .populate('categories')
 
     utilsHelper.sendResponse(
       res,
