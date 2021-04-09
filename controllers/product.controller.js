@@ -116,7 +116,7 @@ productController.getSingleProduct = async (req, res, next) => {
 //Add new product
 productController.addProduct = async (req, res, next) => {
   try {
-    const { name, description, price, size, images, options, toppings, tags, categories, sold } = req.body;
+    const { name, description, price, size, images, options, toppings, categories, sold } = req.body;
     
     let product = await Product.findOne({name: req.name});
     if (product) {
@@ -143,7 +143,6 @@ productController.addProduct = async (req, res, next) => {
       images,
       options,
       toppings,
-      tags,
       categories: categoryIds,
       sold,
     });

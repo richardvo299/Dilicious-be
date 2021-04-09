@@ -6,11 +6,16 @@ const orderSchema = Schema(
       userId: { type: Schema.Types.ObjectId, ref: "User" },
       products: [{ 
         name: { type: String, required: true },
+        description: { type: String },
         price: { type: Number, required: true },
+        size: { type: String },
         images: [{ imageUrl: { type: String, required: true } }],
         options: { type: String, required: true },
         toppings: { type: String, required: true },
         quantity: { type: Number, required: true },
+        tags: [{tag: { type: String }}],
+        categories: [ { type: Schema.Types.ObjectId, ref: "Category" } ],
+        sold: { type: Number },
       }],
       checkout: {
         recipientName: { type: String, required: true },

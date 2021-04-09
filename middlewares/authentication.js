@@ -9,6 +9,7 @@ const authMiddleware = {};
 authMiddleware.loginRequired = (req, res, next) => {
   try {
     const tokenString = req.headers.authorization;
+    console.log("hereeee");
     if (!tokenString) return next(new Error("401 - Access Token required"));
     const accessToken = tokenString.replace("Bearer ", "");
 

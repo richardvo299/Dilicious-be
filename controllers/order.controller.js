@@ -6,6 +6,7 @@ const utilsHelper = require("../helpers/utils.helper");
 const { validationResult, check } = require("express-validator");
 const validator = require("../middlewares/validation");
 const { Error } = require("mongoose");
+const { find } = require("../models/User");
 
 let orderController = {};
 
@@ -14,11 +15,11 @@ orderController.createOrder = async (req, res, next) => {
   try {
     const userId = req.userId;
     const { products, checkout, deliveryFee, status, total } = req.body;
-    validator.checkObjectId(userId);
+
     // products.map((p) => validator.checkObjectId(p));
 
-    if (products && products.length === 0) {
-      return next(new Error("No products added."));
+    if (!products && products.length === 0) {
+      return next(new Error("No products to add"));
     }
 
     const productList = [];
@@ -39,7 +40,7 @@ orderController.createOrder = async (req, res, next) => {
     } else {fee = 40000}
 
     totalBe = totalBeforeCharge + fee;
-
+    // let dupProduct = await Order.find({_id:});
     const order = await Order.create({
         userId,
         products: productList,

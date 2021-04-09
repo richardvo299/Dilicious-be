@@ -34,11 +34,11 @@ router.get("/me", authMiddleware.loginRequired, userController.getCurrentUser);
  * @description Return list orders of current user
  * @access Login Required or Admin authorized
  */
-router.get(
-  "/:id/order",
-  authMiddleware.loginRequired,
-  userController.getCurrentUserOrder,
-);
+// router.get(
+//   "/:id/order",
+//   authMiddleware.loginRequired,
+//   userController.getCurrentUserOrder,
+// );
 
 /**
  * @route Put api/user/:id/payment
@@ -50,5 +50,16 @@ router.get(
 //   authMiddleware.loginRequired,
 //   userController.paymentUserOrder
 // );
+
+/**
+ * @route Post api/user/:id/cart
+ * @description User can check current cart
+ * @access Login required
+ */
+ router.put(
+  "/cart",
+  authMiddleware.loginRequired,
+  userController.addToCart,
+);
 
 module.exports = router;

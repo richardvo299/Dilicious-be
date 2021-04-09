@@ -10,7 +10,19 @@ const userSchema = Schema(
     password: { type: String, required: true },
     role: { type: String, default: "user", enum: ["user", "admin"] },
     isDeleted: { type: Boolean, default: false },
-    cart: { type: Array, default: []},
+    cart: [{ 
+      name: { type: String, required: true },
+      description: { type: String },
+      price: { type: Number, required: true },
+      size: { type: String },
+      images: { type: String, required: true },
+      options: { type: String, required: true },
+      toppings: { type: String, required: true },
+      quantity: { type: Number, required: true },
+      tags: [{tag: { type: String }}],
+      categories: [ { type: Schema.Types.ObjectId, ref: "Category" } ],
+      sold: { type: Number },
+    }],
   },
   { timestamps: true }
 );

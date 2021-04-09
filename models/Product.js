@@ -10,7 +10,7 @@ const productSchema = Schema(
     images: [{ imageUrl: { type: String, required: true } }],
     options: [{ option: { type: String, required: true } }],
     toppings: [{ topping: { type: String, required: true} }],
-    tags: [{tag: { type: String, required: true }}],
+    tags: [{tag: { type: String }}],
     isDeleted: { type: Boolean, default: false },
     categories: [ { type: Schema.Types.ObjectId, ref: "Category" } ],
     sold: { type: Number },

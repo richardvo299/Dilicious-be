@@ -29,29 +29,31 @@ userController.register = async (req, res, next) => {
 userController.getCurrentUser = async (req, res, next) => {
   try {
     const userId = req.userId;
+    console.log("you're here");
     const user = await User.findById(userId);
+    console.log("current user", user);
     if (!user) return next(new Error("401 - user not found"));
     utilsHelper.sendResponse(res, 200, true, {user}, null, "get current user success");
 } catch (error) {
   next (error);
-  d;
+
 }
 };
 
-//Get order of current user
-userController.getCurrentUserOrder = async (req, res, next) => {
-  try {
-    const userId = req.userId;
-    const orders = await Order.find({ userId, isDeleted: false })
-      .populate("userId")
-      .populate("products")
-      .sort({ createdAt: -1 });
+// //Get order of current user
+// userController.getCurrentUserOrder = async (req, res, next) => {
+//   try {
+//     const userId = req.userId;
+//     const orders = await Order.find({ userId, isDeleted: false })
+//       .populate("userId")
+//       .populate("products")
+//       .sort({ createdAt: -1 });
 
-    utilsHelper.sendResponse(res, 200, true, { orders }, null, "Current user");
-  } catch (error) {
-    next(error);
-  }
-};
+//     utilsHelper.sendResponse(res, 200, true, { orders }, null, "Current user");
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 userController.getAllUsers = async (req, res, next) => {
   try {
@@ -59,6 +61,18 @@ userController.getAllUsers = async (req, res, next) => {
     const users = await User.find({});
 
     utilsHelper.sendResponse(res, 200, true, { users }, null, "USer List");
+  } catch (error) {
+    next(error);
+  }
+};
+
+userController.addToCart = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    console.log("req bod", req.body);
+    const user = await User.findByIdAndUpdate(userId, { $push: {cart: req.body}}, {new: true});
+    console.log("user", user);
+    utilsHelper.sendResponse(res, 200, true, { user }, null, "USer List");
   } catch (error) {
     next(error);
   }
