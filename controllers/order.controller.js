@@ -15,6 +15,7 @@ orderController.createOrder = async (req, res, next) => {
   try {
     const userId = req.userId;
     const { products, checkout, deliveryFee, status, total } = req.body;
+    console.log('req order', req.body)
 
     // products.map((p) => validator.checkObjectId(p));
 

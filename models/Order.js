@@ -5,11 +5,11 @@ const orderSchema = Schema(
     {
       userId: { type: Schema.Types.ObjectId, ref: "User" },
       products: [{ 
-        name: { type: String, required: true },
+        name: { type: String, required: true, unique: false },
         description: { type: String },
         price: { type: Number, required: true },
         size: { type: String },
-        images: [{ imageUrl: { type: String, required: true } }],
+        images: { type: String, required: true },
         options: { type: String, required: true },
         toppings: { type: String, required: true },
         quantity: { type: Number, required: true },

@@ -72,7 +72,19 @@ userController.addToCart = async (req, res, next) => {
     console.log("req bod", req.body);
     const user = await User.findByIdAndUpdate(userId, { $push: {cart: req.body}}, {new: true});
     console.log("user", user);
-    utilsHelper.sendResponse(res, 200, true, { user }, null, "USer List");
+    utilsHelper.sendResponse(res, 200, true, { user }, null, "Item(s) added to user's cart successfully");
+  } catch (error) {
+    next(error);
+  }
+};
+
+userController.removeFromCart = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    console.log("req to delete", req);
+    const user = await User.findByIdAndUpdate(userId, { $pull: {_id: req.body}}, {new: true});
+    console.log("user", user);
+    utilsHelper.sendResponse(res, 200, true, { user }, null, "Item(s) removed from user's cart successfully");
   } catch (error) {
     next(error);
   }

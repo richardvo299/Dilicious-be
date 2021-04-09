@@ -52,7 +52,7 @@ router.get("/me", authMiddleware.loginRequired, userController.getCurrentUser);
 // );
 
 /**
- * @route Post api/user/:id/cart
+ * @route Post api/user/cart
  * @description User can check current cart
  * @access Login required
  */
@@ -60,6 +60,17 @@ router.get("/me", authMiddleware.loginRequired, userController.getCurrentUser);
   "/cart",
   authMiddleware.loginRequired,
   userController.addToCart,
+);
+
+/**
+ * @route Post api/user/cart
+ * @description User can delete item from cart
+ * @access Login required
+ */
+ router.delete(
+  "/cart/delete",
+  authMiddleware.loginRequired,
+  userController.removeFromCart,
 );
 
 module.exports = router;
