@@ -11,6 +11,13 @@ const orderController = require("../controllers/order.controller");
 router.post("/", authMiddleware.loginRequired, orderController.createOrder);
 
 /**
+ * @route GET api/order/
+ * @description Admin can get all orders
+ * @access Admin require
+ */
+ router.get("/", authMiddleware.loginRequired, authMiddleware.adminRequired, orderController.getAllOrders);
+
+/**
  * @route POST api/order
  * @description User can update order
  * @access Login require

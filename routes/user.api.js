@@ -67,7 +67,7 @@ router.get("/me", authMiddleware.loginRequired, userController.getCurrentUser);
  * @description User can delete item from cart
  * @access Login required
  */
- router.delete(
+ router.put(
   "/cart/delete",
   authMiddleware.loginRequired,
   userController.removeFromCart,

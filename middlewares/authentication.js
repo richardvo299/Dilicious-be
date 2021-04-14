@@ -9,7 +9,7 @@ const authMiddleware = {};
 authMiddleware.loginRequired = (req, res, next) => {
   try {
     const tokenString = req.headers.authorization;
-    console.log("hereeee");
+
     if (!tokenString) return next(new Error("401 - Access Token required"));
     const accessToken = tokenString.replace("Bearer ", "");
 
@@ -34,6 +34,7 @@ authMiddleware.adminRequired = async (req, res, next) => {
   try {
     const userId = req.userId;
     const currentUser = await User.findById(userId);
+    console.log("current user", currentUser)
     if (!currentUser) return next(new Error("401 - User not found"));
 
     const isAdmin = currentUser.role === "admin";

@@ -121,4 +121,22 @@ orderController.deleteOrder = async (req, res, next) => {
   }
 };
 
+orderController.getAllOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find({})
+    if (!orders) return next(new Error("401 - Orders not found"));
+
+    utilsHelper.sendResponse(
+      res,
+      200,
+      true,
+      { orders },
+      null,
+      "Get all orders Success"
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = orderController;
