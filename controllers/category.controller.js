@@ -28,7 +28,7 @@ categoryController.getAllCategories = async (req, res, next) => {
 categoryController.addCategory = async (req, res, next) => {
   try {
     const { name } = req.body;
-    console.log(name);
+    // console.log(name);
     let category = await Category.findOne({ name: req.body.name.toLowerCase() });
     if (category) {
       return next(new Error("Category already exists"))

@@ -29,7 +29,7 @@ productController.getAllProducts = async (req, res, next) => {
         const category = await Category.findOne({
           name: categoryName[i],
         }).lean();
-        console.log("category id", category._id);
+        // console.log("category id", category._id);
         categoryArray.push(category._id);
       }
     }
@@ -69,7 +69,7 @@ productController.getAllProducts = async (req, res, next) => {
     }
 
     // const totalProducts = await Product.count({ ...filter, ...keywords, isDeleted: false });
-    console.log("Total products", totalProducts);
+    // console.log("Total products", totalProducts);
 
     const totalPages = Math.ceil(totalProducts / limit);
     

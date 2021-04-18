@@ -15,7 +15,7 @@ orderController.createOrder = async (req, res, next) => {
   try {
     const userId = req.userId;
     const { products, checkout, deliveryFee, status, total } = req.body;
-    console.log('req order', req.body)
+    // console.log('req order', req.body)
 
     // products.map((p) => validator.checkObjectId(p));
 
@@ -24,15 +24,15 @@ orderController.createOrder = async (req, res, next) => {
     }
 
     const productList = [];
-    console.log("List of product", products);
-    console.log("products length", products.length);
+    // console.log("List of product", products);
+    // console.log("products length", products.length);
     let totalBeforeCharge = 0;
     let totalBe = 0;
     let fee = 40000;
     for (let i = 0; i < products.length; i++) {
-      console.log("product n", products[i]);      
+      // console.log("product n", products[i]);      
       totalBeforeCharge += products[i].quantity * products[i].price;
-      console.log("Total before delivery", totalBeforeCharge);
+      // console.log("Total before delivery", totalBeforeCharge);
       productList.push(products[i]);
     }
 
